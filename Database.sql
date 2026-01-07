@@ -1,0 +1,34 @@
+CREATE DATABASE sistema_login_robusto; 
+USE sistema_login_robusto;
+
+CREATE TABLE users(
+    id  INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(150) NOT NULL, 
+    email VARCHAR(150) NOT NULL UNIQUE, 
+    senha_hash VARCHAR(255) NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo VARCHAR(50) DEFAULT 'user'
+
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE sessions(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    data_expira TIMESTAMP NOT NULL, 
+    criado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX (token)
+
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE log_acesso(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ultimo_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    INDEX (user_id)
+
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
